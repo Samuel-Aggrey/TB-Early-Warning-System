@@ -291,7 +291,6 @@ elif page == "Early Warning Surveillance":
 
     warnings_df = detect_early_warnings(df)
 
-    st.subheader("⚠ Early Warning Signals")
 
     if warnings_df.empty:
         st.success("No early warning signals detected.")
