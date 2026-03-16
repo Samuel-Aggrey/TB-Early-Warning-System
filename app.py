@@ -290,8 +290,11 @@ elif page == "Early Warning Surveillance":
 
 
     warnings_df = detect_early_warnings(df)
-    st.subheader("⚠ Early Warning Signals")
 
+    st.markdown(
+        '<h2 class="section-header">⚠ Early Warning Signals</h2>',
+        unsafe_allow_html=True
+    )
     if warnings_df.empty:
         st.success("No early warning signals detected.")
     else:
@@ -318,11 +321,8 @@ elif page == "Early Warning Surveillance":
     """)
     
     from ai_reasoning import generate_surveillance_insights
-
-    st.markdown(
-        '<h2 class="section-header">AI Surveillance Reasoning</h2>',
-        unsafe_allow_html=True
-    )
+    st.subheader("Surveillance Reasoning")
+    
 
     insights = generate_surveillance_insights(df)
 
