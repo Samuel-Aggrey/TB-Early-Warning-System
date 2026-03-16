@@ -321,23 +321,26 @@ elif page == "Early Warning Surveillance":
     """)
     warnings_df = detect_early_warnings(df)
 
-    if warnings_df.empty:
-        st.success("No early warning signals detected.")
+# Only rename/reformat if the DataFrame is not empty
+if not warnings_df.empty:
+    # Make sure the column exists
+    if "Signal" in warnings_df.columns:
+        warnings_df["Signal"] = warnings_df["Signal"].replace({
+            "3-Year Consecutive Decline": "📉 Consecutive Decline",
+            "Below Global Average (>5%)": "⚠ Below Global Average"
+        })
+    st.dataframe(warnings_df)
     else:
-        st.dataframe(warnings_df)
-
-    warnings_df["Signal"] = warnings_df["Signal"].replace({
-        "3-Year Consecutive Decline": "📉 Consecutive Decline",
-        "Below Global Average (>5%)": "⚠ Below Global Average"
-    })
+        st.success("No early warning signals detected.")
     
-    from ai_reasoning import generate_surveillance_insights
-    st.subheader("Surveillance Reasoning")
+    
+from ai_reasoning import generate_surveillance_insights
+st.subheader("Surveillance Reasoning")
     
 
-    insights = generate_surveillance_insights(df)
+insights = generate_surveillance_insights(df)
 
-    for insight in insights:
+for insight in insights:
         st.info(insight)
 
 
