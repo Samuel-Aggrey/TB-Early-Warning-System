@@ -245,21 +245,7 @@ if page == "WHO Strategy":
 
 
 elif page == "Early Warning Surveillance":
-    from ai_reasoning import generate_surveillance_insights
-
-    st.markdown(
-        '<h2 class="section-header">AI Surveillance Reasoning</h2>',
-        unsafe_allow_html=True
-    )
-
-    insights = generate_surveillance_insights(df)
-
-    for insight in insights:
-        st.info(insight)
-
-
-        def detect_early_warnings(df):
-
+    def detect_early_warnings(df):
         warnings = []
 
         # Global average per year
@@ -331,22 +317,21 @@ elif page == "Early Warning Surveillance":
 
     These rule-based indicators are designed as **screening signals** to highlight trends that may warrant further epidemiological investigation.
     """)
+    
+    from ai_reasoning import generate_surveillance_insights
 
-elif page == "Sentinel Analysis":
-    st.markdown("<p class='header-style'>Sentinel Country Performance</p>", unsafe_allow_html=True)
+    st.markdown(
+        '<h2 class="section-header">AI Surveillance Reasoning</h2>',
+        unsafe_allow_html=True
+    )
 
-    country = st.selectbox("Search Sentinel Country", sorted(df['country'].unique()))
-    c_data = df[df['country'] == country].sort_values('year')
+    insights = generate_surveillance_insights(df)
 
-    col1, col2 = st.columns(2)
-    with col1:
-        fig = px.line(c_data, x='year', y=['mortality_rate', 'failure_rate'], title=f"Outcomes: {country}")
-        st.plotly_chart(fig, use_container_width=True)
-    with col2:
-        st.markdown("#### Historical Outcome Data Overview")
-        st.dataframe(c_data[['year', 'newrel_coh', 'mortality_rate', 'failure_rate', 'c_new_tsr']],
-                     use_container_width=True)
+    for insight in insights:
+        st.info(insight)
 
+
+    
 elif page == "Author Profile":
     author_page()
 
