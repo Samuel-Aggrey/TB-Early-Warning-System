@@ -148,7 +148,7 @@ def author_page():
 # --- 6. NAVIGATION ---
 with st.sidebar:
     st.image("tb_logo_final.png", use_container_width=True)
-    page = st.sidebar.radio("Navigation", ["WHO Strategy", "Sentinel Analysis", "AI Surveillance", "Author Profile", "Future Projection (coming soon)"])
+    page = st.sidebar.radio("Navigation", ["WHO Strategy", "Sentinel Analysis", "Data-driven Surveillance", "Author Profile", "Future Projection (coming soon)"])
     st.divider()
     st.caption("Trial Version Early Warning System")
 
@@ -244,7 +244,7 @@ if page == "WHO Strategy":
             "**Current Status (March 2026):** National systems are presently finalizing the 2024 outcome data. This dashboard will update as WHO audits are released.")
 
 
-elif page == "AI Surveillance":
+elif page == "Data-driven Surveillance":
     from ai_reasoning import generate_surveillance_insights
 
     st.markdown(
