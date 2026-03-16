@@ -148,7 +148,7 @@ def author_page():
 # --- 6. NAVIGATION ---
 with st.sidebar:
     st.image("tb_logo_final.png", use_container_width=True)
-    page = st.sidebar.radio("Navigation", ["WHO Strategy", "Sentinel Analysis", "Data-driven Surveillance", "Author Profile", "Future Projection (coming soon)"])
+    page = st.sidebar.radio("Navigation", ["WHO Strategy", "Sentinel Analysis", "Early Warning Surveillance", "Author Profile", "Future Projection (Under Development)"])
     st.divider()
     st.caption("Trial Version Early Warning System")
 
@@ -244,7 +244,7 @@ if page == "WHO Strategy":
             "**Current Status (March 2026):** National systems are presently finalizing the 2024 outcome data. This dashboard will update as WHO audits are released.")
 
 
-elif page == "Data-driven Surveillance":
+elif page == "Early Warning Surveillance":
     from ai_reasoning import generate_surveillance_insights
 
     st.markdown(
@@ -258,7 +258,79 @@ elif page == "Data-driven Surveillance":
         st.info(insight)
 
 
+        def detect_early_warnings(df):
 
+        warnings = []
+
+        # Global average per year
+        global_avg = df.groupby("year")["c_new_sp_tsr"].mean()
+
+        for country in df["country"].unique():
+
+            country_df = df[df["country"] == country].sort_values("year")
+
+            # --- Signal 1: Consecutive Decline ---
+            declines = 0
+            prev = None
+
+            for _, row in country_df.iterrows():
+                if prev is not None and row["c_new_sp_tsr"] < prev:
+                    declines += 1
+                else:
+                    declines = 0
+
+                if declines >= 3:
+                    warnings.append({
+                        "Country": country,
+                        "Year": row["year"],
+                        "Signal": "3-Year Consecutive Decline"
+                    })
+
+                prev = row["c_new_sp_tsr"]
+
+            # --- Signal 2: Below Global Average ---
+            for _, row in country_df.iterrows():
+
+                global_value = global_avg[row["year"]]
+
+                if row["c_new_sp_tsr"] < global_value - 5:
+                    warnings.append({
+                        "Country": country,
+                        "Year": row["year"],
+                        "Signal": "Below Global Average (>5%)"
+                    })
+
+        return pd.DataFrame(warnings)
+
+
+    warnings_df = detect_early_warnings(df)
+
+    st.subheader("⚠ Early Warning Signals")
+
+    if warnings_df.empty:
+        st.success("No early warning signals detected.")
+    else:
+        st.dataframe(warnings_df)
+
+    st.subheader("⚠ Early Warning Signals")
+
+    st.info("""
+    **How the Early Warning Detection System Works**
+
+    This system automatically scans tuberculosis treatment outcome data to identify potential early signs of declining program performance.
+
+    Two surveillance signals are currently monitored:
+
+    **1. Consecutive Decline Signal**
+    - Triggered when a country's treatment success rate decreases for **three consecutive years**.
+    - This pattern may indicate a sustained deterioration in treatment outcomes.
+
+    **2. Global Deviation Signal**
+    - Triggered when a country's treatment success rate falls **more than 5 percentage points below the global average** for the same year.
+    - This identifies countries performing substantially below the global trend.
+
+    These rule-based indicators are designed as **screening signals** to highlight trends that may warrant further epidemiological investigation.
+    """)
 
 elif page == "Sentinel Analysis":
     st.markdown("<p class='header-style'>Sentinel Country Performance</p>", unsafe_allow_html=True)
