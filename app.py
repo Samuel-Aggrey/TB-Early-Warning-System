@@ -330,7 +330,7 @@ if not warnings_df.empty:
             "Below Global Average (>5%)": "⚠ Below Global Average"
         })
     st.dataframe(warnings_df)
-    else:
+else:
         st.success("No early warning signals detected.")
     
     
