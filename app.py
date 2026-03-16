@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-from prophet import Prophet
 import numpy as np
 
 # --- 1. PAGE CONFIG ---
