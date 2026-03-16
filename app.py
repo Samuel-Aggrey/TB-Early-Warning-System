@@ -319,6 +319,17 @@ elif page == "Early Warning Surveillance":
 
     These rule-based indicators are designed as **screening signals** to highlight trends that may warrant further epidemiological investigation.
     """)
+    warnings_df = detect_early_warnings(df)
+
+    if warnings_df.empty:
+        st.success("No early warning signals detected.")
+    else:
+        st.dataframe(warnings_df)
+
+    warnings_df["Signal"] = warnings_df["Signal"].replace({
+        "3-Year Consecutive Decline": "📉 Consecutive Decline",
+        "Below Global Average (>5%)": "⚠ Below Global Average"
+    })
     
     from ai_reasoning import generate_surveillance_insights
     st.subheader("Surveillance Reasoning")
