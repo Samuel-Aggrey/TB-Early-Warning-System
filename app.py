@@ -243,6 +243,21 @@ if page == "WHO Strategy":
     st.info(
             "**Current Status (March 2026):** National systems are presently finalizing the 2024 outcome data. This dashboard will update as WHO audits are released.")
 
+elif page == "Sentinel Analysis":
+    st.markdown("<p class='header-style'>Sentinel Country Performance</p>", unsafe_allow_html=True)
+
+    country = st.selectbox("Search Sentinel Country", sorted(df['country'].unique()))
+    c_data = df[df['country'] == country].sort_values('year')
+
+    col1, col2 = st.columns(2)
+    with col1:
+        fig = px.line(c_data, x='year', y=['mortality_rate', 'failure_rate'], title=f"Outcomes: {country}")
+        st.plotly_chart(fig, use_container_width=True)
+    with col2:
+        st.markdown("#### Historical Outcome Data Overview")
+        st.dataframe(c_data[['year', 'newrel_coh', 'mortality_rate', 'failure_rate', 'c_new_tsr']],
+                     use_container_width=True)
+
 
 elif page == "Early Warning Surveillance":
     def detect_early_warnings(df):
