@@ -67,7 +67,7 @@ st.markdown("""
 
 
 
-# Create 3 columns to center the content horizontally
+# Dashboad title
 import base64
 
 # Function to convert image to base64
@@ -105,7 +105,7 @@ st.divider()
 
 
 
-# --- 5. PAGE: AUTHOR PROFILE (Integrated from CV) ---
+
 def author_page():
     st.markdown("<h2 class='section-header'>Researcher Identity</h2>", unsafe_allow_html=True)
 
